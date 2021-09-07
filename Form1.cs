@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LeoCorpLibrary;
 
 namespace GameLauncher
 {
@@ -15,6 +16,12 @@ namespace GameLauncher
         public Form1()
         {
             InitializeComponent();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            //loading game list
+            LeoCorpLibrary.Load.ListViewContentXML(listView1, "GameList.xml");
         }
         int ListedApp = 0;
         private void button1_Click(object sender, EventArgs e)
@@ -34,14 +41,12 @@ namespace GameLauncher
                 ListedApp++;
                 listView1.Items.Add(listingapp);
             }
-
+            Save.ListViewContentXML(listView1, "GameList.xml");
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            listView1.SelectedItems.Clear();
-            int RemovedImage = listView1.FocusedItem.Index;
-            imageList1.Images.RemoveAt(RemovedImage);
+            //removing will be here thing 
         }
         private void button3_Click(object sender, EventArgs e)
         {
