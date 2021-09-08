@@ -78,6 +78,7 @@ namespace GameLauncher
             // 
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1});
+            this.listView1.FullRowSelect = true;
             this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(140, 59);
             this.listView1.MultiSelect = false;

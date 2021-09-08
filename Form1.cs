@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LeoCorpLibrary;
+using System.IO;
 
 namespace GameLauncher
 {
@@ -18,13 +19,17 @@ namespace GameLauncher
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        public void Form1_Load(object sender, EventArgs e)
         {
-            //loading game list
-            LeoCorpLibrary.Load.ListViewContentXML(listView1, "GameList.xml");
+            if (File.Exists(@"bin/GameList.xml"))
+            {
+                LeoCorpLibrary.Load.ListViewContentCustom(listView1, @"bin/GameList.xml");
+            }
+            
+            GameCounter.FileCreator();
         }
-        int ListedApp = 0;
-        private void button1_Click(object sender, EventArgs e)
+
+        public void button1_Click(object sender, EventArgs e)
         {
             listView1.SmallImageList = imageList1;
             OpenFileDialog GameFolder = new OpenFileDialog();
@@ -37,16 +42,24 @@ namespace GameLauncher
                 Icon GetIcon = Icon.ExtractAssociatedIcon(@GameFolder.FileName);
                 listingapp.SubItems.Add("GameFolder.SafeFileName");
                 imageList1.Images.Add(GetIcon);
-                listingapp.ImageIndex = ListedApp;
-                ListedApp++;
+                listingapp.ImageIndex = GameCounter.ListedApp; //Image index = Listed Application number
+                GameCounter.ListedApp++;
                 listView1.Items.Add(listingapp);
             }
-            Save.ListViewContentXML(listView1, "GameList.xml");
+
+            string SavedDataDir = @"bin";
+            if (!Directory.Exists(SavedDataDir))
+            {
+                Directory.CreateDirectory(SavedDataDir);
+            }
+
+            Save.ListViewContentCustom(listView1, @"bin/GameList.xml");
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            //removing will be here thing 
+            listView1.FocusedItem.Remove();
+            Save.ListViewContentCustom(listView1, @"bin/GameList.xml");
         }
         private void button3_Click(object sender, EventArgs e)
         {
