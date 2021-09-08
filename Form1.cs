@@ -26,24 +26,23 @@ namespace GameLauncher
                 LeoCorpLibrary.Load.ListViewContentCustom(listView1, @"bin/GameList.xml");
             }
             
-            GameCounter.FileCreator();
+            GameLibrary.FileCreator();
         }
 
         public void button1_Click(object sender, EventArgs e)
         {
             listView1.SmallImageList = imageList1;
-            OpenFileDialog GameFolder = new OpenFileDialog();
-            GameFolder.Title = "Open Application";
-            GameFolder.Filter = "Application | *.exe";
-            if (GameFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            GameLibrary.GameFolder.Title = "Open Application";
+            GameLibrary.GameFolder.Filter = "Application | *.exe";
+            if (GameLibrary.GameFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 ListViewItem listingapp = new ListViewItem();
-                listingapp.Text = GameFolder.SafeFileName;
-                Icon GetIcon = Icon.ExtractAssociatedIcon(@GameFolder.FileName);
+                listingapp.Text = GameLibrary.GameFolder.SafeFileName;
+                Icon GetIcon = Icon.ExtractAssociatedIcon(@GameLibrary.GameFolder.FileName);
                 listingapp.SubItems.Add("GameFolder.SafeFileName");
                 imageList1.Images.Add(GetIcon);
-                listingapp.ImageIndex = GameCounter.ListedApp; //Image index = Listed Application number
-                GameCounter.ListedApp++;
+                listingapp.ImageIndex = GameLibrary.ListedApp; //Image index = Listed Application number
+                GameLibrary.ListedApp++;
                 listView1.Items.Add(listingapp);
             }
 
@@ -66,6 +65,9 @@ namespace GameLauncher
             this.Close();
         }
 
-        
+        private void listView1_DoubleClick(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start(GameLibrary.GameFolder.FileName); //Opens Application
+        }
     }
 }

@@ -13,9 +13,10 @@ using System.IO;
 namespace GameLauncher
 {
     
-    public static class GameCounter
+    public static class GameLibrary
     {
         public static int ListedApp { get; set; }
+        public static OpenFileDialog GameFolder = new OpenFileDialog();
         public static void FileCreator()
         {
             if (!File.Exists("bin/ExistingGameCount.txt"))
