@@ -19,13 +19,20 @@ namespace GameLauncher
             InitializeComponent();
         }
 
+        public static string Language = "";
         public void Form1_Load(object sender, EventArgs e)
         {
             if (File.Exists(@"bin/GameList.xml"))
             {
-                LeoCorpLibrary.Load.ListViewContentCustom(listView1, @"bin/GameList.xml");
+                LeoCorpLibrary.Load.ListViewContentXML(listView1, @"bin/GameList.xml");
             }
-            
+           
+            if (File.Exists(@"bin/Language.txt"))
+            {
+                StreamReader SRLanguage = new StreamReader(@"bin/Language.txt");
+                Language = SRLanguage.ReadToEnd();
+            }
+
             GameLibrary.FileCreator();
         }
 
@@ -45,20 +52,27 @@ namespace GameLauncher
                 GameLibrary.ListedApp++;
                 listView1.Items.Add(listingapp);
             }
-
             string SavedDataDir = @"bin";
             if (!Directory.Exists(SavedDataDir))
             {
                 Directory.CreateDirectory(SavedDataDir);
             }
-
-            Save.ListViewContentCustom(listView1, @"bin/GameList.xml");
+            
+            Save.ListViewContentXML(listView1, @"bin/GameList.xml");
         }
-
+        
         private void button2_Click(object sender, EventArgs e)
         {
-            listView1.FocusedItem.Remove();
-            Save.ListViewContentCustom(listView1, @"bin/GameList.xml");
+            if (listView1.Focused == false)
+            {
+                MessageBox.Show("You need to choose something to delete! You can't remove nothing!");
+            }
+            else
+            {
+                listView1.FocusedItem.Remove();
+            }
+            
+            Save.ListViewContentXML(listView1, @"bin/GameList.xml");
         }
         private void button3_Click(object sender, EventArgs e)
         {
@@ -68,6 +82,12 @@ namespace GameLauncher
         private void listView1_DoubleClick(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start(GameLibrary.GameFolder.FileName); //Opens Application
+        }
+
+        private void btn_Settings_Click(object sender, EventArgs e)
+        {
+            SettingsTab settings = new SettingsTab();
+            settings.Show();
         }
     }
 }
