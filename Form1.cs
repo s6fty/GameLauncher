@@ -27,10 +27,11 @@ namespace GameLauncher
                 LeoCorpLibrary.Load.ListViewContentXML(listView1, @"bin/GameList.xml");
             }
            
-            if (File.Exists(@"bin/Language.txt"))
+             if (File.Exists(@"bin/Language.txt"))
             {
                 StreamReader SRLanguage = new StreamReader(@"bin/Language.txt");
                 Language = SRLanguage.ReadToEnd();
+                SRLanguage.Dispose();
             }
 
             GameLibrary.FileCreator();
@@ -39,20 +40,30 @@ namespace GameLauncher
         public void button1_Click(object sender, EventArgs e)
         {
             listView1.SmallImageList = imageList1;
+
             GameLibrary.GameFolder.Title = "Open Application";
-            GameLibrary.GameFolder.Filter = "Application | *.exe";
+
+            GameLibrary.GameFolder.Filter = "Application | *.exe|Steam Game | *.url";
+
             if (GameLibrary.GameFolder.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 ListViewItem listingapp = new ListViewItem();
-                listingapp.Text = GameLibrary.GameFolder.SafeFileName;
-                Icon GetIcon = Icon.ExtractAssociatedIcon(@GameLibrary.GameFolder.FileName);
-                listingapp.SubItems.Add("GameFolder.SafeFileName");
-                imageList1.Images.Add(GetIcon);
+
+                listingapp.Text = GameLibrary.GameFolder.SafeFileName; //
+
+                Icon GetIcon = Icon.ExtractAssociatedIcon(@GameLibrary.GameFolder.FileName); //Gets icon
+
+                imageList1.Images.Add(GetIcon); //Sets the icon
+
+                GameLibrary.ListedApp++; //Adds 1 point to ListedApp because of change in the index numbers
+
                 listingapp.ImageIndex = GameLibrary.ListedApp; //Image index = Listed Application number
-                GameLibrary.ListedApp++;
-                listView1.Items.Add(listingapp);
+
+                listView1.Items.Add(listingapp); //Finally adding the application
             }
+
             string SavedDataDir = @"bin";
+
             if (!Directory.Exists(SavedDataDir))
             {
                 Directory.CreateDirectory(SavedDataDir);
@@ -63,16 +74,26 @@ namespace GameLauncher
         
         private void button2_Click(object sender, EventArgs e)
         {
-            if (listView1.Focused == false)
+            if (listView1.FocusedItem == null)
             {
                 MessageBox.Show("You need to choose something to delete! You can't remove nothing!");
             }
+
             else
             {
                 listView1.FocusedItem.Remove();
             }
+
+            if (listView1.Items.Count == 0)
+            {
+                File.Delete(@"bin/GameList.xml");
+            }
+
+            else
+            {
+                Save.ListViewContentXML(listView1, @"bin/GameList.xml");
+            }
             
-            Save.ListViewContentXML(listView1, @"bin/GameList.xml");
         }
         private void button3_Click(object sender, EventArgs e)
         {

@@ -23,12 +23,13 @@ namespace GameLauncher
             if (!File.Exists("bin/ExistingGameCount.txt"))
             {
                 StreamWriter GameCount = new StreamWriter("bin/ExistingGameCount.txt"); //creating game count
+                GameCount.Dispose();
             }
             else
             {
                 StreamReader StreamApp = new StreamReader("bin/ExistingGameCount.txt"); //reading game count
                 ListedApp = Convert.ToInt32(StreamApp.ReadLine());
-                StreamApp.Close();
+                StreamApp.Dispose();
             }
         }
 
